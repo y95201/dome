@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Y95201\\Lianlianpay\\": "src/"
+            "Y95201\\": "src/"
         }
     },
     "authors": [
@@ -15,6 +15,11 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.4.0"
+        "php": ">=7.4.0",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "pimple/pimple": "dev-main",
+        "monolog/monolog": "2.x-dev",
+        "guzzlehttp/guzzle": "7.4.x-dev"
     }
 }

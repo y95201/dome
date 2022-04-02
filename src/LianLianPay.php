@@ -1,46 +1,36 @@
 <?php
-
-namespace Y95201\LianLianPay;
-
-class LianLianPay 
+/*
+ * @Author: Y95201 
+ * @Date: 2022-03-23 09:59:46 
+ * @Last Modified by: Y95201
+ * @Last Modified time: 2022-03-31 15:25:25
+ */
+namespace Y95201;
+class LianLianPay extends \Pimple\Container
 {
     protected $providers = [
-        // Payment\ServiceProvider::class,
         Account\ServiceProvider::class,
-        // Common\ServiceProvider::class,
-        // Secured\ServiceProvider::class,
-        // Refund\ServiceProvider::class,
-        // Withdrawal\ServiceProvider::class,
-        // Password\ServiceProvider::class,
-        // AccManage\ServiceProvider::class,
     ];
     public function __construct(array $config = array())
     {
-        // parent::__construct($config);
-
-        $this->config = function () use ($config) {
+        parent::__construct($config);
+        $this['config'] = function () use ($config) {
             return new Core\Config($config);
         };
-
-        // $this->registerBase();
-        // $this->registerProviders();
-        // $this->initializeLogger();
-
-        // Http::setDefaultOptions($this['config']->get('guzzle', ['timeout' => 5.0]));
-
-        // $this->logConfiguration($config);
+        $this->registerProviders();
     }
-    public function LianLianPay()
+    public function __get($id)
     {
-        return $this->providers;
+        return $this->offsetGet($id);
     }
-    // public function __get($name)
-    // {
-    //     return $this->offsetGet($name);
-    // }
-
-    // public function __set($name, $value)
-    // {
-    //     $this->offsetSet($name, $value);
-    // }
+    public function __set($id, $value)
+    {
+        $this->offsetSet($id,$value);
+    }
+    private function registerProviders()
+    {
+        foreach ($this->providers as $provider){
+            $this->register(new $provider());
+        }
+    }
 }

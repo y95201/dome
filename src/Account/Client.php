@@ -1,27 +1,19 @@
 <?php
-
-namespace Y95201\LianLianPay\Account;
-
-class Client 
+/*
+ * @Author: Y95201 
+ * @Date: 2022-03-23 09:59:28 
+ * @Last Modified by: Y95201
+ * @Last Modified time: 2022-04-01 14:59:37
+ */
+namespace Y95201\Account;
+class Client extends \Y95201\Core\AbstractAPI
 {
-    /**
-     * 绑定手机验证码申请
-     * @doc https://open.lianlianpay.com/docs/accp/accpstandard/regphone-verifycode-apply.html
-     * @param $userId
-     * @param $regPhone
-     * @param null $timestamp
-     * @return Collection|null
-     * @throws HttpException
-     */
-    public function phoneVerifyCodeApply($userId = null, $regPhone = null, $timestamp = null)
+    public function phoneVerifyCodeApply($userId, $regPhone)
     {
-    	return 123456789;
-        // $params = [
-        //     'timestamp' => $timestamp ?: $this->timestamp,
-        //     'oid_partner' => $this->config['oid_partner'],
-        //     'user_id' => $userId,
-        //     'reg_phone' => $regPhone
-        // ];
-        // return $this->parse($this->url('acctmgr/regphone-verifycode-apply'), $params);
+    	$params = [
+            'user_id' => $userId,
+            'reg_phone' => $regPhone
+        ];
+        return $this->parse($this->url('acctmgr/regphone-verifycode-apply'), $params);
     }
 }

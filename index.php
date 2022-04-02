@@ -1,5 +1,6 @@
 <?php
 require "vendor/autoload.php";
+use Y95201\LianLianPay;
 $config = [
     'debug' => true, // 开启调
     'oid_partner' => '2020042200284052', // 商户号
@@ -15,6 +16,6 @@ $config = [
     ],
 ];
 
-$Test = new Y95201\Lianlianpay\LianLianPay($config);
-
-print_r($Test->LianLianPay());
+$llp = new \Y95201\LianLianPay($config);
+$result = $llp->account->phoneVerifyCodeApply('111','222'); 
+print_r($result);

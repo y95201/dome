@@ -1,8 +1,12 @@
 <?php
-
-namespace Y95201\LianLianPay;
-
-class LianLianPay 
+/*
+ * @Author: Y95201 
+ * @Date: 2022-03-31 11:01:34 
+ * @Last Modified by: Y95201
+ * @Last Modified time: 2022-03-31 14:01:41
+ */
+namespace Y95201\Core;
+class Config  extends Collection
 {
     public function getInstantPayPrivateKey(): string
     {
