@@ -162,9 +162,10 @@ class Client implements ClientInterface, \Psr\Http\Client\ClientInterface
             throw $this->invalidBody();
         }
         $request = new Psr7\Request($method, $uri, $headers, $body, $version);
+        
         // Remove the option so that they are not doubly-applied.
         unset($options['headers'], $options['body'], $options['version']);
-
+        
         return $this->transfer($request, $options);
     }
 
@@ -326,7 +327,7 @@ class Client implements ClientInterface, \Psr\Http\Client\ClientInterface
         $request = $this->applyOptions($request, $options);
         /** @var HandlerStack $handler */
         $handler = $options['handler'];
-
+        
         try {
             return P\Create::promiseFor($handler($request, $options));
         } catch (\Exception $e) {

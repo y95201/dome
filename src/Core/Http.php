@@ -198,7 +198,7 @@ class Http
         if (!($this->client instanceof HttpClient)) {
             $this->client = new HttpClient();
         }
-
+        
         return $this->client;
     }
 
@@ -240,21 +240,21 @@ class Http
     public function request(string $url, string $method = 'GET', array $options = []): ResponseInterface
     {
         $method = strtoupper($method);
-
+        
         $options = array_merge(self::$defaults, $options);
-
-        Log::debug('Client Request:', compact('url', 'method', 'options'));
-
+        
+        //Log::debug('Client Request:', compact('url', 'method', 'options'));
+        
         $options['handler'] = $this->getHandler();
-
+        
         $response = $this->getClient()->request($method, $url, $options);
-
-        Log::debug('API response:', [
-            'Status' => $response->getStatusCode(),
-            'Reason' => $response->getReasonPhrase(),
-            'Headers' => $response->getHeaders(),
-            'Body' => strval($response->getBody()),
-        ]);
+       
+        // Log::debug('API response:', [
+        //     'Status' => $response->getStatusCode(),
+        //     'Reason' => $response->getReasonPhrase(),
+        //     'Headers' => $response->getHeaders(),
+        //     'Body' => strval($response->getBody()),
+        // ]);
 
         return $response;
     }

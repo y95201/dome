@@ -6,6 +6,7 @@
  * @Last Modified time: 2022-03-31 15:25:25
  */
 namespace Y95201;
+use Y95201\Core\Http;
 class LianLianPay extends \Pimple\Container
 {
     protected $providers = [
@@ -17,6 +18,8 @@ class LianLianPay extends \Pimple\Container
         $this['config'] = function () use ($config) {
             return new Core\Config($config);
         };
+       
+        Http::setDefaultOptions($this['config']->get('guzzle', ['timeout' => 5.0]));
         $this->registerProviders();
     }
     public function __get($id)
