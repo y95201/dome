@@ -10,7 +10,7 @@ namespace Y95201\Core;
 use Y95201\Core\Log;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\HandlerStack;
-
+use Psr\Http\Message\ResponseInterface;
 class Http
 {
     /**
@@ -248,14 +248,14 @@ class Http
         $options['handler'] = $this->getHandler();
         
         $response = $this->getClient()->request($method, $url, $options);
-       
+
         // Log::debug('API response:', [
         //     'Status' => $response->getStatusCode(),
         //     'Reason' => $response->getReasonPhrase(),
         //     'Headers' => $response->getHeaders(),
         //     'Body' => strval($response->getBody()),
         // ]);
-
+            
         return $response;
     }
 

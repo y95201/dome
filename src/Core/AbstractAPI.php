@@ -83,10 +83,10 @@ abstract class AbstractAPI
             $this->http = new Http();
         }
 
-        // if (0 === count($this->http->getMiddlewares())) {
-        //     $this->registerHttpMiddlewares();
-        // }
-
+        if (0 === count($this->http->getMiddlewares())) {
+            $this->registerHttpMiddlewares();
+        }
+    //  print_r($this->http);die;   
         return $this->http;
     }
 
@@ -149,6 +149,7 @@ abstract class AbstractAPI
     {
         // 获取http实例
         $http = $this->getHttp();
+       
         $baseParams = [
             'timestamp' => $this->timestamp,
             'oid_partner' => $this->config['oid_partner']
@@ -157,13 +158,13 @@ abstract class AbstractAPI
         $params = $this->filterNull($params);
         
         $sign = $this->buildSignatureDataParams($params);
-       
+        
         $contents = $http->parseJSON(call_user_func_array([$http, $method], [$url, $params, $sign]));
         
         if (empty($contents)) {
             return null;
         }
-
+        
         $this->checkAndThrow($contents);
 
         return (new Collection($contents));
@@ -204,9 +205,9 @@ abstract class AbstractAPI
     protected function registerHttpMiddlewares()
     {
         // log
-        $this->http->addMiddleware($this->logMiddleware());
+        //$this->http->addMiddleware($this->logMiddleware());
         // signature
-        $this->http->addMiddleware($this->signatureMiddleware());
+        //$this->http->addMiddleware($this->signatureMiddleware());
     }
 
     protected function signatureMiddleware()
@@ -249,7 +250,7 @@ abstract class AbstractAPI
                 $contents['ret_msg'] = 'Unknown';
             }
 
-            throw new HttpException($contents['ret_msg'], $contents['ret_code']);
+            //throw new HttpException($contents['ret_msg'], $contents['ret_code']);
         }
     }
 
