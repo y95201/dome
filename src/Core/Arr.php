@@ -7,9 +7,6 @@
  */
 
 namespace Y95201\Core;
-
-use Closure;
-
 class Arr
 {
     /**
@@ -18,7 +15,6 @@ class Arr
      * @param array  $array
      * @param string $key
      * @param mixed  $value
-     *
      * @return array
      */
     public static function add($array, $key, $value)
@@ -26,7 +22,6 @@ class Arr
         if (is_null(static::get($array, $key))) {
             static::set($array, $key, $value);
         }
-
         return $array;
     }
 
@@ -35,18 +30,15 @@ class Arr
      *
      * @param array    $array
      * @param \Closure $callback
-     *
      * @return array
      */
-    public static function build($array, Closure $callback)
+    public static function build($array, $callback)
     {
         $results = [];
-
         foreach ($array as $key => $value) {
             list($innerKey, $innerValue) = call_user_func($callback, $key, $value);
             $results[$innerKey] = $innerValue;
         }
-
         return $results;
     }
 
@@ -54,15 +46,11 @@ class Arr
      * Divide an array into two arrays. One with keys and the other with values.
      *
      * @param array $array
-     *
      * @return array
      */
     public static function divide($array)
     {
-        return [
-            array_keys($array),
-            array_values($array),
-        ];
+        return [array_keys($array), array_values($array)];
     }
 
     /**
@@ -70,13 +58,11 @@ class Arr
      *
      * @param array  $array
      * @param string $prepend
-     *
      * @return array
      */
     public static function dot($array, $prepend = '')
     {
         $results = [];
-
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $results = array_merge($results, static::dot($value, $prepend.$key.'.'));
@@ -84,7 +70,6 @@ class Arr
                 $results[$prepend.$key] = $value;
             }
         }
-
         return $results;
     }
 
@@ -93,12 +78,12 @@ class Arr
      *
      * @param array        $array
      * @param array|string $keys
-     *
      * @return array
      */
     public static function except($array, $keys)
     {
-        return array_diff_key($array, array_flip((array) $keys));
+        static::forget($array, $keys);
+        return $array;
     }
 
     /**
@@ -106,13 +91,11 @@ class Arr
      *
      * @param array  $array
      * @param string $key
-     *
      * @return array
      */
     public static function fetch($array, $key)
     {
         $results = [];
-
         foreach (explode('.', $key) as $segment) {
             $results = [];
             foreach ($array as $value) {
@@ -121,7 +104,6 @@ class Arr
             }
             $array = array_values($results);
         }
-
         return array_values($results);
     }
 
@@ -131,7 +113,6 @@ class Arr
      * @param array    $array
      * @param \Closure $callback
      * @param mixed    $default
-     *
      * @return mixed
      */
     public static function first($array, $callback, $default = null)
@@ -141,7 +122,6 @@ class Arr
                 return $value;
             }
         }
-
         return $default;
     }
 
@@ -151,7 +131,6 @@ class Arr
      * @param array    $array
      * @param \Closure $callback
      * @param mixed    $default
-     *
      * @return mixed
      */
     public static function last($array, $callback, $default = null)
@@ -163,7 +142,6 @@ class Arr
      * Flatten a multi-dimensional array into a single level.
      *
      * @param array $array
-     *
      * @return array
      */
     public static function flatten($array)
@@ -175,7 +153,6 @@ class Arr
                 $return[] = $x;
             }
         );
-
         return $return;
     }
 
@@ -188,7 +165,6 @@ class Arr
     public static function forget(&$array, $keys)
     {
         $original = &$array;
-
         foreach ((array) $keys as $key) {
             $parts = explode('.', $key);
             while (count($parts) > 1) {
@@ -209,7 +185,6 @@ class Arr
      * @param array  $array
      * @param string $key
      * @param mixed  $default
-     *
      * @return mixed
      */
     public static function get($array, $key, $default = null)
@@ -217,18 +192,15 @@ class Arr
         if (is_null($key)) {
             return $array;
         }
-
         if (isset($array[$key])) {
             return $array[$key];
         }
-
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || !array_key_exists($segment, $array)) {
                 return $default;
             }
             $array = $array[$segment];
         }
-
         return $array;
     }
 
@@ -237,7 +209,6 @@ class Arr
      *
      * @param array        $array
      * @param array|string $keys
-     *
      * @return array
      */
     public static function only($array, $keys)
@@ -251,13 +222,11 @@ class Arr
      * @param array  $array
      * @param string $value
      * @param string $key
-     *
      * @return array
      */
     public static function pluck($array, $value, $key = null)
     {
         $results = [];
-
         foreach ($array as $item) {
             $itemValue = is_object($item) ? $item->{$value} : $item[$value];
             // If the key is "null", we will just append the value to the array and keep
@@ -270,7 +239,6 @@ class Arr
                 $results[$itemKey] = $itemValue;
             }
         }
-
         return $results;
     }
 
@@ -280,14 +248,12 @@ class Arr
      * @param array  $array
      * @param string $key
      * @param mixed  $default
-     *
      * @return mixed
      */
     public static function pull(&$array, $key, $default = null)
     {
         $value = static::get($array, $key, $default);
         static::forget($array, $key);
-
         return $value;
     }
 
@@ -299,7 +265,6 @@ class Arr
      * @param array  $array
      * @param string $key
      * @param mixed  $value
-     *
      * @return array
      */
     public static function set(&$array, $key, $value)
@@ -307,9 +272,7 @@ class Arr
         if (is_null($key)) {
             return $array = $value;
         }
-
         $keys = explode('.', $key);
-
         while (count($keys) > 1) {
             $key = array_shift($keys);
             // If the key doesn't exist at this depth, we will just create an empty array
@@ -321,47 +284,33 @@ class Arr
             $array = &$array[$key];
         }
         $array[array_shift($keys)] = $value;
-
         return $array;
     }
 
     /**
      * Sort the array using the given Closure.
      *
-     * @param array    $array
-     * @param \Closure $callback
-     *
+     * @param array                $array
      * @return array
      */
-    public static function sort($array, Closure $callback)
+    public static function sort($array, $callback)
     {
         $results = [];
-
         foreach ($array as $key => $value) {
             $results[$key] = $callback($value);
         }
-
         return $results;
     }
 
     /**
-     * Filter the array using the given Closure.
+     * Filter the array using the given callback.
      *
      * @param array    $array
-     * @param \Closure $callback
-     *
+     * @param callable $callback
      * @return array
      */
-    public static function where($array, Closure $callback)
+    public static function where($array, callable $callback)
     {
-        $filtered = [];
-
-        foreach ($array as $key => $value) {
-            if (call_user_func($callback, $key, $value)) {
-                $filtered[$key] = $value;
-            }
-        }
-
-        return $filtered;
+        return array_filter($array, $callback, ARRAY_FILTER_USE_BOTH);
     }
 }

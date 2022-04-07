@@ -61,7 +61,6 @@ class Http
 
     /**
      * Return current guzzle default settings.
-     *
      * @return array
      */
     public static function getDefaultOptions()
@@ -87,14 +86,12 @@ class Http
     public function put($url, $options = [])
     {
         $key = is_array($options) ? 'form_params' : 'body';
-
         return $this->request($url, 'PUT', [$key => $options]);
     }
 
     public function delete($url, $options = [])
     {
         $key = is_array($options) ? 'form_params' : 'body';
-
         return $this->request($url, 'DELETE', [$key => $options]);
     }
 
@@ -112,7 +109,6 @@ class Http
     public function json(string $url, $options = [], array $queries = []): ResponseInterface
     {
         is_array($options) && $options = json_encode($options, JSON_UNESCAPED_UNICODE);
-
         return $this->request($url, 'POST', ['query' => $queries, 'body' => $options, 'headers' => ['content-type' => 'application/json']]);
     }
 
@@ -131,7 +127,6 @@ class Http
     public function post(string $url, $options, $signatureData, bool $headerSignature = true, array $queries = []): ResponseInterface
     {
         is_array($options) && $options = json_encode($options, JSON_UNESCAPED_UNICODE);
-
         $header = [
             'content-type' => 'application/json;charset=utf-8',
         ];
@@ -141,7 +136,6 @@ class Http
                 'Signature-Data' => $signatureData
             ]);
         }
-
         return $this->request($url, 'POST', ['query' => $queries, 'body' => $options, 'headers' => $header]);
     }
 
@@ -159,18 +153,15 @@ class Http
     public function upload($url, array $files = [], array $form = [], array $queries = [])
     {
         $multipart = [];
-
         foreach ($files as $name => $path) {
             $multipart[] = [
                 'name' => $name,
                 'contents' => fopen($path, 'r'),
             ];
         }
-
         foreach ($form as $name => $contents) {
             $multipart[] = compact('name', 'contents');
         }
-
         return $this->request($url, 'POST', ['query' => $queries, 'multipart' => $multipart]);
     }
 
@@ -184,7 +175,6 @@ class Http
     public function setClient(HttpClient $client)
     {
         $this->client = $client;
-
         return $this;
     }
 
@@ -198,7 +188,6 @@ class Http
         if (!($this->client instanceof HttpClient)) {
             $this->client = new HttpClient();
         }
-        
         return $this->client;
     }
 
@@ -212,7 +201,6 @@ class Http
     public function addMiddleware(callable $middleware)
     {
         array_push($this->middlewares, $middleware);
-
         return $this;
     }
 
@@ -240,22 +228,16 @@ class Http
     public function request(string $url, string $method = 'GET', array $options = []): ResponseInterface
     {
         $method = strtoupper($method);
-        
         $options = array_merge(self::$defaults, $options);
-        
         //Log::debug('Client Request:', compact('url', 'method', 'options'));
-        
         $options['handler'] = $this->getHandler();
-        
         $response = $this->getClient()->request($method, $url, $options);
-
         // Log::debug('API response:', [
         //     'Status' => $response->getStatusCode(),
         //     'Reason' => $response->getReasonPhrase(),
         //     'Headers' => $response->getHeaders(),
         //     'Body' => strval($response->getBody()),
-        // ]);
-            
+        // ]); 
         return $response;
     }
 
@@ -268,21 +250,16 @@ class Http
      */
     public function parseJSON($body)
     {
-        
         if ($body instanceof ResponseInterface) {
             $body = mb_convert_encoding($body->getBody(), 'UTF-8');
         }
-
         if (empty($body)) {
             return false;
         }
-
         $contents = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
-
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new HttpException('Failed to parse JSON: ' . json_last_error_msg());
         }
-
         return $contents;
     }
 
@@ -294,15 +271,12 @@ class Http
     protected function getHandler()
     {
         $stack = HandlerStack::create();
-
         foreach ($this->middlewares as $middleware) {
             $stack->push($middleware);
         }
-
         if (isset(static::$defaults['handler']) && is_callable(static::$defaults['handler'])) {
             $stack->push(static::$defaults['handler'], self::USER_DEFINED_HANDLER);
         }
-
         return $stack;
     }
 }

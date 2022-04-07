@@ -7,7 +7,7 @@ $config = [
     'private_key' => file_get_contents('merchant_rsa_private_key.pem'), // 商户私钥 地址自行配置，绝对路径
     'public_key' => file_get_contents('merchant_rsa_public_key.pem'), // 商户公钥
     'll_public_key' => file_get_contents('llpay_public_key.pem'), // 连连支付公钥
-    'production' => 'pro', // 是否生产环境 根据.env文件值判断
+    'production' => '', // 是否生产环境 有值为生产 无值为测试
     // 日志
     'log' => [
         'level' => 'debug',
@@ -17,5 +17,5 @@ $config = [
 ];
 
 $llp = new \Y95201\LianLianPay($config);
-$result = $llp->account->phoneVerifyCodeApply('111','222'); 
+$result = $llp->account->phoneVerifyCodeApply('111','13023667672'); 
 print_r($result);

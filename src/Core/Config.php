@@ -8,6 +8,9 @@
 namespace Y95201\Core;
 class Config  extends Collection
 {
+    /**
+     * 获取商户私钥
+     */
     public function getInstantPayPrivateKey(): string
     {
         if (file_exists($this->get('private_key'))) {
@@ -16,7 +19,9 @@ class Config  extends Collection
             return $this->get('private_key');
         }
     }
-
+    /**
+     * 获取商户公钥
+     */
     public function getInstantPayPublicKey(): string
     {
         if (file_exists($this->get('public_key'))) {
@@ -25,7 +30,9 @@ class Config  extends Collection
             return $this->get('public_key');
         }
     }
-
+    /**
+     * 获取连连公钥
+     */
     public function getInstantPayLianLianPublicKey(): string
     {
         if (file_exists($this->get('ll_public_key'))) {
