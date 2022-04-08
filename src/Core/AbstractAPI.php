@@ -1,13 +1,15 @@
 <?php
 /*
  * @Author: Y95201 
- * @Date: 2022-04-01 13:40:15 
+ * @Date: 2022-04-01 12:40:15 
  * @Last Modified by: Y95201
- * @Last Modified time: 2022-04-01 15:07:28
+ * @Last Modified time: 2022-04-08 16:20:26
  */
 namespace Y95201\Core;
 
 use Y95201\Core\Arr;
+use Y95201\Core\Collection;
+use Y95201\Core\Log;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 abstract class AbstractAPI
@@ -95,6 +97,7 @@ abstract class AbstractAPI
      */
     protected function parse($url, $params, string $method = 'post')
     {
+        
         // 获取http实例
         $http = $this->getHttp();
         $baseParams = [

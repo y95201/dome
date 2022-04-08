@@ -12,10 +12,10 @@ $config = [
     'log' => [
         'level' => 'debug',
         'permission' => 0777,
-        //'file' => storage_path('logs/lianlianpay-' . date('Y-m-d') . '.log'), // 日志文件, 你可以自定义
+        'file' => 'logs/lianlianpay-' . date('Y-m-d') . '.log', // 日志文件, 你可以自定义
     ],
 ];
 
 $llp = new \Y95201\LianLianPay($config);
-$result = $llp->account->phoneVerifyCodeApply('111','13023667672'); 
-print_r($result);
+print_r($llp);die;
+// $result = $llp->account->phoneVerifyCodeApply('111','13023667672'); 

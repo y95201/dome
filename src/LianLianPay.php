@@ -1,9 +1,9 @@
 <?php
 /*
  * @Author: Y95201 
- * @Date: 2022-03-23 09:59:46 
+ * @Date: 2022-03-29 13:59:46 
  * @Last Modified by: Y95201
- * @Last Modified time: 2022-03-31 15:25:25
+ * @Last Modified time: 2022-04-08 13:11:01
  */
 namespace Y95201;
 use Y95201\Core\Http;
@@ -18,7 +18,7 @@ class LianLianPay extends \Pimple\Container
         $this['config'] = function () use ($config) {
             return new Core\Config($config);
         };
-       
+        
         Http::setDefaultOptions($this['config']->get('guzzle', ['timeout' => 5.0]));
         $this->registerProviders();
     }

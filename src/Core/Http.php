@@ -1,9 +1,9 @@
 <?php
 /*
  * @Author: Y95201 
- * @Date: 2022-04-01 14:41:03 
- * @Last Modified by:   Y95201 
- * @Last Modified time: 2022-04-01 14:41:03 
+ * @Date: 2022-04-01 13:41:03 
+ * @Last Modified by: Y95201
+ * @Last Modified time: 2022-04-08 16:55:59
  */
 namespace Y95201\Core;
 
@@ -43,16 +43,12 @@ class Http
     ];
 
     /**
-     * Guzzle client default settings.
-     *
-     * @var array
+     * Guzzle客户端默认设置.
      */
     protected static $defaults = [];
 
     /**
-     * Set guzzle default settings.
-     *
-     * @param array $defaults
+     * 设置guzzle默认设置.
      */
     public static function setDefaultOptions($defaults = [])
     {
@@ -60,8 +56,7 @@ class Http
     }
 
     /**
-     * Return current guzzle default settings.
-     * @return array
+     * 返回当前的guzzle默认设置.
      */
     public static function getDefaultOptions()
     {
@@ -69,26 +64,30 @@ class Http
     }
 
     /**
-     * GET request.
-     *
-     * @param string $url
-     * @param array $options
-     *
-     * @return ResponseInterface
-     *
-     * @throws HttpException
+     * GET请求.
+     * @url string 
+     * @options array 
      */
     public function get($url, array $options = [])
     {
         return $this->request($url, 'GET', ['query' => $options]);
     }
-
+    
+    /**
+     * PUT请求.
+     * @url string 
+     * @options array 
+     */
     public function put($url, $options = [])
     {
         $key = is_array($options) ? 'form_params' : 'body';
         return $this->request($url, 'PUT', [$key => $options]);
     }
-
+    /**
+     * DELETE请求.
+     * @url string 
+     * @options array 
+     */
     public function delete($url, $options = [])
     {
         $key = is_array($options) ? 'form_params' : 'body';
@@ -96,15 +95,10 @@ class Http
     }
 
     /**
-     * JSON request.
-     *
-     * @param string $url
-     * @param string|array $options
-     * @param array $queries
-     *
-     * @return ResponseInterface
-     *
-     * @throws HttpException|\GuzzleHttp\Exception\GuzzleException
+     * JSON请求.
+     * @url string $url
+     * @options string|array $options
+     * @queries array $queries
      */
     public function json(string $url, $options = [], array $queries = []): ResponseInterface
     {
@@ -114,15 +108,11 @@ class Http
 
     /**
      * JSON request.
-     *
-     * @param string $url
-     * @param $signatureData
-     * @param string|array $options
-     * @param bool $headerSignature
-     * @param array $queries
-     * @return ResponseInterface
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @url string $url
+     * @signatureData $signatureData
+     * @options string|array $options
+     * @headerSignature bool $headerSignature
+     * @queries array $queries
      */
     public function post(string $url, $options, $signatureData, bool $headerSignature = true, array $queries = []): ResponseInterface
     {
@@ -141,14 +131,9 @@ class Http
 
     /**
      * Upload file.
-     *
-     * @param string $url
-     * @param array $files
-     * @param array $form
-     *
-     * @return ResponseInterface
-     *
-     * @throws HttpException
+     * @url string $url
+     * @files array $files
+     * @form array $form
      */
     public function upload($url, array $files = [], array $form = [], array $queries = [])
     {
@@ -166,11 +151,7 @@ class Http
     }
 
     /**
-     * Set GuzzleHttp\Client.
-     *
-     * @param \GuzzleHttp\Client $client
-     *
-     * @return Http
+     * 设置http\Client.
      */
     public function setClient(HttpClient $client)
     {
@@ -179,9 +160,7 @@ class Http
     }
 
     /**
-     * Return GuzzleHttp\Client instance.
-     *
-     * @return \GuzzleHttp\Client
+     * 返回http\Client实例.
      */
     public function getClient()
     {
@@ -192,11 +171,7 @@ class Http
     }
 
     /**
-     * Add a middleware.
-     *
-     * @param callable $middleware
-     *
-     * @return $this
+     * 添加一个中间件.
      */
     public function addMiddleware(callable $middleware)
     {
@@ -205,9 +180,7 @@ class Http
     }
 
     /**
-     * Return all middlewares.
-     *
-     * @return array
+     * 退回所有中间件.
      */
     public function getMiddlewares()
     {
@@ -215,38 +188,22 @@ class Http
     }
 
     /**
-     * Make a request.
-     *
-     * @param string $url
-     * @param string $method
-     * @param array $options
-     *
-     * @return ResponseInterface
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * 请求.
+     * @url string $url
+     * @method string $method
+     * @options array $options
      */
     public function request(string $url, string $method = 'GET', array $options = []): ResponseInterface
     {
         $method = strtoupper($method);
         $options = array_merge(self::$defaults, $options);
-        //Log::debug('Client Request:', compact('url', 'method', 'options'));
         $options['handler'] = $this->getHandler();
         $response = $this->getClient()->request($method, $url, $options);
-        // Log::debug('API response:', [
-        //     'Status' => $response->getStatusCode(),
-        //     'Reason' => $response->getReasonPhrase(),
-        //     'Headers' => $response->getHeaders(),
-        //     'Body' => strval($response->getBody()),
-        // ]); 
         return $response;
     }
 
     /**
-     * @param \Psr\Http\Message\ResponseInterface|string $body
-     *
-     * @return mixed
-     *
-     * @throws HttpException
+     * 转json
      */
     public function parseJSON($body)
     {
@@ -257,16 +214,11 @@ class Http
             return false;
         }
         $contents = json_decode($body, true, 512, JSON_BIGINT_AS_STRING);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new HttpException('Failed to parse JSON: ' . json_last_error_msg());
-        }
         return $contents;
     }
 
     /**
-     * Build a handler.
-     *
-     * @return HandlerStack
+     * 构建一个处理程序.
      */
     protected function getHandler()
     {
