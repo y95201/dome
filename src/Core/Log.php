@@ -3,7 +3,7 @@
  * @Author: Y95201 
  * @Date: 2022-04-08 12:51:25 
  * @Last Modified by: Y95201
- * @Last Modified time: 2022-04-08 17:10:32
+ * @Last Modified time: 2022-04-08 19:15:03
  */
 
 namespace Y95201\Core;
@@ -13,7 +13,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
 class Log
 {
-    public static function trace(array $msg = [], string $level = 'DEBUG')
+    public static function trace($file,array $msg = [], string $level = 'DEBUG')
     {
         switch ($level) {
             case 'DEBUG':

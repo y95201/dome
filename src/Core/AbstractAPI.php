@@ -1,15 +1,15 @@
 <?php
 /*
  * @Author: Y95201 
- * @Date: 2022-04-01 12:40:15 
+ * @Date: 2022-04-01 13:40:15 
  * @Last Modified by: Y95201
- * @Last Modified time: 2022-04-08 16:20:26
+ * @Last Modified time: 2022-04-08 19:15:23
  */
 namespace Y95201\Core;
 
 use Y95201\Core\Arr;
-use Y95201\Core\Collection;
 use Y95201\Core\Log;
+use Y95201\Core\Collection;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 abstract class AbstractAPI
@@ -46,6 +46,7 @@ abstract class AbstractAPI
     {
         $this->timestamp = date('YmdHis');
         $this->setConfig($config);
+       
     }
 
     /**
@@ -97,13 +98,19 @@ abstract class AbstractAPI
      */
     protected function parse($url, $params, string $method = 'post')
     {
-        
+        $file = $this->config->log['file'];
+        $msg['msg'] = '123';
+        $msg['params'] = ['123','456'];
+
+        Log::trace($file,$msg);
+        print_r($file);die;
         // 获取http实例
         $http = $this->getHttp();
         $baseParams = [
             'timestamp' => $this->timestamp,
-            'oid_partner' => $this->config['oid_partner']
+            'oid_partner' => $this->config->oid_partner
         ];
+        
         $params = array_merge($baseParams, $params);
         $params = $this->filterNull($params);
         $sign = $this->buildSignatureDataParams($params);
