@@ -178,8 +178,6 @@ abstract class AbstractAPI
     {
         // log
         $this->http->addMiddleware($this->logMiddleware());
-        // // signature
-        // $this->http->addMiddleware($this->signatureMiddleware());
     }
     /**
      * 记录请求.
