@@ -1,4 +1,5 @@
 <?php
+
 require "vendor/autoload.php";
 use Y95201\LianLianPay;
 $config = [
@@ -18,4 +19,7 @@ $config = [
 
 $llp = new \Y95201\LianLianPay($config);
 // print_r($llp);die;
-$result = $llp->account->phoneVerifyCodeApply('111','13023667672'); 
+$result = $llp->account->phoneVerifyCodeApply('111','1323667672'); 
+        
+
+print_r($result);die;

@@ -46,7 +46,7 @@ abstract class AbstractAPI
     {
         $this->timestamp = date('YmdHis');
         $this->setConfig($config);
-       
+        $this->file = $this->config->log['file'];
     }
 
     /**
@@ -98,12 +98,6 @@ abstract class AbstractAPI
      */
     protected function parse($url, $params, string $method = 'post')
     {
-        $file = $this->config->log['file'];
-        $msg['msg'] = '123';
-        $msg['params'] = ['123','456'];
-
-        Log::trace($file,$msg);
-        print_r($file);die;
         // 获取http实例
         $http = $this->getHttp();
         $baseParams = [
@@ -129,6 +123,10 @@ abstract class AbstractAPI
     {
         if (is_null($this->http)) {
             $this->http = new Http();
+        }
+        //记录请求
+        if (0 === count($this->http->getMiddlewares())) {
+            $this->registerHttpMiddlewares();
         }
         return $this->http;
     }
@@ -161,7 +159,7 @@ abstract class AbstractAPI
     }
 
     /**
-     * 检查数组数据错误
+     * 检查数组数据错误并记录日志
      */
     protected function checkAndThrow(array $contents)
     {
@@ -170,6 +168,27 @@ abstract class AbstractAPI
             if (empty($contents['ret_msg'])) {
                 $contents['ret_msg'] = 'Unknown';
             }
+            Log::trace($this->file,'错误返回',$contents);
         }
+    }
+    /**
+     * 记录请求中间件.
+     */
+    protected function registerHttpMiddlewares()
+    {
+        // log
+        $this->http->addMiddleware($this->logMiddleware());
+        // // signature
+        // $this->http->addMiddleware($this->signatureMiddleware());
+    }
+    /**
+     * 记录请求.
+     */
+    protected function logMiddleware()
+    {
+        return Middleware::tap(function (RequestInterface $request, $options) {
+            Log::trace($this->file,'请求头:',$request->getHeaders());
+            Log::trace($this->file,'请求方式:'.$request->getMethod(),$options);
+        });
     }
 }
