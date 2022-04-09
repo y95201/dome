@@ -13,7 +13,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
 class Log
 {
-    public static function trace($file,array $msg = [], string $level = 'DEBUG')
+    public static function trace($file,string $msg = '',array $params = [], string $level = 'DEBUG')
     {
         switch ($level) {
             case 'DEBUG':
@@ -28,6 +28,6 @@ class Log
         //创建日志路径
         $logger->pushHandler(new StreamHandler($file, $level));
         $logger->pushHandler(new FirePHPHandler());
-        $logger->info($msg['msg'] ?? '', $msg['params'] ?? []);
+        $logger->info($msg ?? '', $params ?? []);
     }
 }
