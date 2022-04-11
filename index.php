@@ -19,5 +19,5 @@ $config = [
 
 $llp = new \Y95201\LianLianPay($config);
 // $result = $llp->account->phoneVerifyCodeApply('111','13023667672');  
-$result = $llp->account->phoneVerifyCodeVerify('111','13023667672','123456');  
+$result = $llp->account->phoneVerifyCodeVerify('111','1323667672','123456');  
 print_r($result);die;
