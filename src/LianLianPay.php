@@ -14,6 +14,7 @@ class LianLianPay extends \Pimple\Container
         Account\ServiceProvider::class,
         Password\ServiceProvider::class,
         Payment\ServiceProvider::class,
+        Refund\ServiceProvider::class,
         Secured\ServiceProvider::class,
         Withdrawal\ServiceProvider::class,
     ];
