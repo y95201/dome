@@ -5,12 +5,12 @@
  * @Last Modified by: Y95201
  * @Last Modified time: 2022-04-03 14:04:05
  */
-namespace Y95201\AccManage;
+namespace Y95201\Withdrawal;
 class ServiceProvider implements \Pimple\ServiceProviderInterface
 {
     public function register(\Pimple\Container $pimple)
     {
-        $pimple['accManage'] = function ($pimple) {
+        $pimple['withdrawal'] = function ($pimple) {
             return new Client($pimple['config']);
         };
     }

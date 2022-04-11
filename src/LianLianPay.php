@@ -10,7 +10,12 @@ use Y95201\Core\Http;
 class LianLianPay extends \Pimple\Container
 {
     protected $providers = [
+        AccManage\ServiceProvider::class,
         Account\ServiceProvider::class,
+        Password\ServiceProvider::class,
+        Payment\ServiceProvider::class,
+        Secured\ServiceProvider::class,
+        Withdrawal\ServiceProvider::class,
     ];
     public function __construct(array $config = array())
     {
